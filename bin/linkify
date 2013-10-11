@@ -1,0 +1,61 @@
+#! /usr/bin/env node
+
+var program = require('commander');
+
+program.
+  usage('[options] <user/repo> <pull request #>').
+  option('--token [value]', 'github authentication token').
+  option('--bzusername [username]', 'bugzilla username').
+  option('--bzpassword [password]', 'bugzilla password').
+  option('--bzapiurl [url]', 'bugzilla api endpoint url').
+  parse(process.argv);
+
+
+
+var task = require('../index');
+var options = {};
+
+if (program.args.length < 2) {
+  console.error('  must pass both user/repo and pull request #');
+  program.outputHelp();
+  process.exit(1);
+}
+
+// get user from args
+var repoPair = program.args[0].split('/');
+
+var options = {
+  user: repoPair[0],
+  repo: repoPair[1],
+  oauthToken: program.token,
+  number: parseInt(program.args[1], 10),
+  bugzillaConfig: {}
+};
+
+if (program.bzusername) {
+    options.bugzillaConfig.username = program.bzusername;
+}
+
+if (program.bzpassword) {
+    options.bugzillaConfig.password = program.bzpassword;
+}
+
+if (program.bzapiurl) {
+    options.bugzillaConfig.url = program.bzapiurl;
+}
+
+task(options, function(err, status) {
+  if (err) throw err;
+
+  if (status.success) {
+    console.log('success pull request #%s linked to bug', options.number)
+    return;
+  }
+
+  console.error(
+    'pull request #%s is not safe to merge: %s',
+    options.number,
+    status.message
+  );
+  process.exit(1);
+});

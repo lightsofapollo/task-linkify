@@ -1,0 +1,23 @@
+{
+  "name": "task-linkify",
+  "version": "0.0.0",
+  "description": "task-linkify",
+  "main": "index.js",
+  "bin": {
+    "bz-reviewed": "./bin/linkify"
+  },
+  "scripts": {
+    "test": "make"
+  },
+  "license": "Apache2",
+  "devDependencies": {
+    "mocha": "~1.13.0",
+    "sinon": "~1.7.3"
+  },
+  "dependencies": {
+    "debug": "~0.7.2",
+    "bz": "~1.0.0-alpha",
+    "commander": "~2.0.0",
+    "github": "~0.1.12"
+  }
+}
