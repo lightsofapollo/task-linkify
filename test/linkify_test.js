@@ -61,7 +61,7 @@ suite('linkify', function() {
   test('attachFile() Failure', function(done) {
     subject.attachFile(badBZStub, 123456, {}, function(err, data) {
       assert.ok(err instanceof Error);
-      assert.ok(-1 != err.message.indexOf('Error creating attachment'));
+      assert.ok(-1 !== err.message.indexOf('Error creating attachment'));
       done();
     });
   });
@@ -79,7 +79,7 @@ suite('linkify', function() {
     subject.createRedirect(goodBZStub, badGithubStub, 'testOrg',
       'testRepo', 75, 123456, function(err, data) {
         assert.ok(err instanceof Error);
-        assert.ok(-1 != err.message.indexOf('Error fetching PRs'));
+        assert.ok(-1 !== err.message.indexOf('Error fetching PRs'));
         done();
       });
   });
@@ -97,7 +97,7 @@ suite('linkify', function() {
     subject.link(goodBZStub, badGithubStub, 'testOrg', 'testRepo',
       75, function(err, data) {
         assert.ok(err instanceof Error);
-        assert.ok(-1 !=
+        assert.ok(-1 !==
           err.message.indexOf('Error getting commits for PR'));
         done();
       });
@@ -107,7 +107,7 @@ suite('linkify', function() {
     subject.link(goodBZStub, mediocreGithubStub, 'testOrg', 'testRepo',
       75, function(err, data) {
         assert.ok(err instanceof Error);
-        assert.ok(-1 !=
+        assert.ok(-1 !==
           err.message.indexOf('Error fetching PRs'));
         done();
       });
@@ -117,7 +117,7 @@ suite('linkify', function() {
     subject.link(badBZStub, goodGithubStub, 'testOrg', 'testRepo',
       75, function(err, data) {
         assert.ok(err instanceof Error);
-        assert.ok(-1 !=
+        assert.ok(-1 !==
           err.message.indexOf('Error creating attachment'));
         done();
       });
