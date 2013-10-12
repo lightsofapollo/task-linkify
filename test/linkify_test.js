@@ -94,8 +94,13 @@ suite('linkify', function() {
   });
 
   test('link() Github Failure', function(done) {
-    subject.link(goodBZStub, badGithubStub, 'testOrg', 'testRepo',
-      75, function(err, data) {
+    subject.link(
+      goodBZStub,
+      badGithubStub,
+      'testOrg',
+      'testRepo',
+      75,
+      function(err, data) {
         assert.ok(err instanceof Error);
         assert.ok(-1 !==
           err.message.indexOf('Error getting commits for PR'));
@@ -104,8 +109,13 @@ suite('linkify', function() {
   });
 
   test('link() Github Partial Failure', function(done) {
-    subject.link(goodBZStub, mediocreGithubStub, 'testOrg', 'testRepo',
-      75, function(err, data) {
+    subject.link(
+      goodBZStub,
+      mediocreGithubStub,
+      'testOrg',
+      'testRepo',
+      75,
+      function(err, data) {
         assert.ok(err instanceof Error);
         assert.ok(-1 !==
           err.message.indexOf('Error fetching PRs'));
@@ -114,8 +124,13 @@ suite('linkify', function() {
   });
 
   test('link() BZ Failure', function(done) {
-    subject.link(badBZStub, goodGithubStub, 'testOrg', 'testRepo',
-      75, function(err, data) {
+    subject.link(
+      badBZStub,
+      goodGithubStub,
+      'testOrg',
+      'testRepo',
+      75,
+      function(err, data) {
         assert.ok(err instanceof Error);
         assert.ok(-1 !==
           err.message.indexOf('Error creating attachment'));
