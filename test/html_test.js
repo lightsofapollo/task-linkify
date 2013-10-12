@@ -11,7 +11,7 @@ suite('html', function() {
 
   test('redirectPage', function() {
     var redirectPage = subject.redirectPage(href);
-    assert.ok(-1 != 'url=' + href);
-    assert.ok(-1 != 'http-equiv="refresh"');
+    assert.ok(-1 !== redirectPage.indexOf('url=' + href));
+    assert.ok(-1 !== redirectPage.indexOf('http-equiv="refresh"'));
   });
 });
