@@ -5,7 +5,7 @@
   "repository": "https://github.com/mozilla-b2g-bot/task-linkify",
   "main": "index.js",
   "bin": {
-    "bz-reviewed": "./bin/linkify"
+    "linkify": "./bin/linkify"
   },
   "scripts": {
     "test": "make"
