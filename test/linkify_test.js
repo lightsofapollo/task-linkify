@@ -4,7 +4,8 @@ var sinon = require('sinon');
 
 suite('linkify', function() {
 
-  var subject = require('../lib/linkify');
+  var subject = require('../lib/linkify'),
+      states = require('../lib/states.js');
 
   var goodBZStub = {
     createAttachment: sinon.stub().callsArgWithAsync(2, null, 123456)
@@ -29,6 +30,11 @@ suite('linkify', function() {
     commit: { message: 'bug 123456: test bug' }
   }];
 
+  var ghNoBugsCommitList = [{
+    sha: 'abc5678',
+    commit: { message: 'there ain\'t no id here' }
+  }];
+
   var goodGithubStub = {
     pullRequests: {
       get: sinon.stub().callsArgWithAsync(1, null, githubPR),
@@ -50,10 +56,18 @@ suite('linkify', function() {
     }
   };
 
+  var noBugNumberGithubStub = {
+    pullRequests: {
+      get: sinon.stub().callsArgWithAsync(1, true, null),
+      getCommits: sinon.stub().callsArgWithAsync(1, null, ghNoBugsCommitList)
+    }
+  };
+
+
   test('attachFile() Success', function(done) {
     subject.attachFile(goodBZStub, 123456, {}, function(err, data) {
       assert.ok(data.success);
-      assert.ok(data.data === 123456);
+      assert.ok(data.attachment_id === 123456);
       done(err);
     });
   });
@@ -70,7 +84,7 @@ suite('linkify', function() {
     subject.createRedirect(goodBZStub, goodGithubStub, 'testOrg',
       'testRepo', 75, 123456, function(err, data) {
         assert.ok(data.success);
-        assert.ok(data.data === 123456);
+        assert.ok(data.attachment_id === 123456);
         done(err);
       });
   });
@@ -87,7 +101,7 @@ suite('linkify', function() {
   test('link() Success', function(done) {
     subject.link(goodBZStub, goodGithubStub, 'testOrg', 'testRepo',
       75, function(err, data) {
-        assert.ok(data.data === 123456);
+        assert.ok(data.attachment_id === 123456);
         assert.ok(data.success);
         done(err);
       });
@@ -135,6 +149,20 @@ suite('linkify', function() {
         assert.ok(-1 !==
           err.message.indexOf('Error creating attachment'));
         done();
+      });
+  });
+
+  test('link() No bugs found', function(done) {
+    subject.link(
+      goodBZStub,
+      noBugNumberGithubStub,
+      'testOrg',
+      'testRepo',
+      75,
+      function(err, data) {
+        assert.ok(!data.success);
+        assert.ok(data.state === states.LINK_NO_BUG.state);
+        done(err);
       });
   });
 
