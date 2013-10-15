@@ -67,7 +67,7 @@ suite('linkify', function() {
   test('attachFile() Success', function(done) {
     subject.attachFile(goodBZStub, 123456, {}, function(err, data) {
       assert.ok(data.success);
-      assert.ok(data.attachment_id === 123456);
+      assert.ok(data.attachmentId === 123456);
       done(err);
     });
   });
@@ -84,7 +84,7 @@ suite('linkify', function() {
     subject.createRedirect(goodBZStub, goodGithubStub, 'testOrg',
       'testRepo', 75, 123456, function(err, data) {
         assert.ok(data.success);
-        assert.ok(data.attachment_id === 123456);
+        assert.ok(data.attachmentId === 123456);
         done(err);
       });
   });
@@ -101,7 +101,7 @@ suite('linkify', function() {
   test('link() Success', function(done) {
     subject.link(goodBZStub, goodGithubStub, 'testOrg', 'testRepo',
       75, function(err, data) {
-        assert.ok(data.attachment_id === 123456);
+        assert.ok(data.attachmentId === 123456);
         assert.ok(data.success);
         done(err);
       });

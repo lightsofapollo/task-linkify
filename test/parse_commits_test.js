@@ -43,14 +43,18 @@ suite('parse_commits', function() {
   test('two bugs, two commits', function() {
     assert.deepEqual(
       [1234, 5678],
-      subject.parseCommits([oneBugCommitMsg, noBugCommitMsg,
-                 anotherOneBugCommitMsg]));
+      subject.parseCommits(
+        [oneBugCommitMsg, noBugCommitMsg, anotherOneBugCommitMsg]
+      ));
   });
 
   test('two bugs, two commits reversed', function() {
-    assert.deepEqual([5678, 1234],
-      subject.parseCommits([anotherOneBugCommitMsg, noBugCommitMsg,
-                  oneBugCommitMsg]));
-
+    assert.deepEqual(
+      [5678, 1234],
+      subject.parseCommits(
+        [anotherOneBugCommitMsg,
+         noBugCommitMsg,
+         oneBugCommitMsg]
+      ));
   });
 });

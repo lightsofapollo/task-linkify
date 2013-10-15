@@ -33,23 +33,23 @@ var options = {
 };
 
 if (program.bzusername) {
-    options.bugzillaConfig.username = program.bzusername;
+  options.bugzillaConfig.username = program.bzusername;
 }
 
 if (program.bzpassword) {
-    options.bugzillaConfig.password = program.bzpassword;
+  options.bugzillaConfig.password = program.bzpassword;
 }
 
 if (program.bzapiurl) {
-    options.bugzillaConfig.url = program.bzapiurl;
+  options.bugzillaConfig.url = program.bzapiurl;
 }
 
 task(options, function(err, status) {
   if (err) throw err;
 
   if (status.success) {
-    console.log('success pull request #%s linked to bug', options.number)
-    return;
+  console.log('success pull request #%s linked to bug', options.number)
+  return;
   }
 
   console.error(
