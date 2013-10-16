@@ -44,16 +44,17 @@ if (program.bzapiurl) {
   options.bugzillaConfig.url = program.bzapiurl;
 }
 
-task(options, function(err, status) {
+task(options, function(err, outcome, data) {
   if (err) throw err;
 
-  if (status.success) {
-  console.log('success pull request #%s linked to bug', options.number)
-  return;
+  if (outcome) {
+    console.log('success pull request #%s linked to bug %s',
+        options.number, JSON.stringify(data));
+    return;
   }
 
   console.error(
-    'pull request #%s is not safe to merge: %s',
+    'pull request #%s was not linked %s',
     options.number,
     status.message
   );
