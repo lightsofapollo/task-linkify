@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "debug": "~0.7.2",
-    "bz": "~1.0.0-alpha",
+    "bz": "~1.0.0-alpha.5",
     "commander": "~2.0.0",
     "github": "~0.1.12"
   }
