@@ -5,15 +5,22 @@ var sinon = require('sinon');
 suite('linkify', function() {
 
   var subject = require('../lib/linkify'),
-      states = require('../lib/states.js');
+      states = require('../lib/states.js'),
+      consts = require('../lib/consts');
 
-  var goodBZStub = {
-    createAttachment: sinon.stub().callsArgWithAsync(2, null, 123456)
-  };
+  var goodBZStub, badBZStub;
+  setup(function() {
+    goodBZStub = {
+      createAttachment: sinon.stub().callsArgWithAsync(2, null, 123456),
+      bugAttachments: sinon.stub().callsArgWithAsync(1, null, [])
+    };
 
-  var badBZStub = {
-    createAttachment: sinon.stub().callsArgWithAsync(2, true, null)
-  };
+    badBZStub = {
+      createAttachment: sinon.stub().callsArgWithAsync(2, true, null),
+      bugAttachments: sinon.stub().callsArgWithAsync(1, null, [])
+    };
+  });
+
 
   var githubPR = {
     user: { login: 'testUser' },
@@ -101,6 +108,55 @@ suite('linkify', function() {
         assert.ok(data.attachmentId === 123456);
         done(err);
       });
+  });
+
+  test('checkRedirect() not attached', function(done) {
+    subject.checkRedirect(
+      goodBZStub,
+      goodGithubStub,
+      'testOrg',
+      'testRepo',
+      75,
+      123456,
+      function(err, outcome) {
+        if (err) return done(err);
+        assert.ok(outcome, 'result is successful');
+        assert.called(goodBZStub.createAttachment);
+        done();
+      }
+    );
+  });
+
+  test('checkRedirect() aleady attached', function(done) {
+    var attachedBZStub = {
+      createAttachment: goodBZStub.createAttachment,
+      bugAttachments: sinon.stub().callsArgWithAsync(1, null, [{
+        content_type: consts.GITHUB_PULL_TYPE,
+        data: new Buffer('testOrg/testRepo/pull/75').toString('base64')
+      }])
+    };
+
+    subject.checkRedirect(
+      attachedBZStub,
+      goodGithubStub,
+      'testOrg',
+      'testRepo',
+      75,
+      123456,
+      function(err, outcome) {
+        if (err) return done(err);
+        assert.ok(outcome, 'result is successful');
+
+        assert.calledWithMatch(
+          attachedBZStub.bugAttachments,
+          sinon.match(123456),
+          sinon.match.any
+        );
+
+        assert.notCalled(attachedBZStub.createAttachment);
+        done();
+      }
+    );
   });
 
   test('createRedirect() Github Failure', function(done) {
